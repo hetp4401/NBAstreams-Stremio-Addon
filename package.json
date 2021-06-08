@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/hetp4401/NBAstreams-Stremio-Addon#readme",
   "dependencies": {
+    "cache-manager": "^3.4.3",
     "express": "^4.17.1",
     "fast-html-parser": "^1.0.1",
     "request": "^2.88.2",

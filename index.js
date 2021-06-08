@@ -1,6 +1,11 @@
 const express = require("express");
 const addon = express();
 
+const cacheManager = require("cache-manager");
+const cache = cacheManager.caching({
+  store: "memory",
+});
+
 const { getMatches } = require("./matches");
 const { getStreams } = require("./streams");
 
@@ -15,36 +20,51 @@ addon.get("/manifest.json", (req, res) => {
   respond(res, MANIFEST);
 });
 
-addon.get("/meta/tv/:id.json", (req, res) => {
+addon.get("/meta/:type/:id.json", (req, res) => {
   respond(res, META);
 });
 
-addon.get("/catalog/tv/:id.json", (req, res) => {
-  getMatches().then((games) => {
-    respond(res, {
-      metas: games.map((x) => {
-        return {
-          id: x.id,
-          type: req.params.type,
-          name: x.name,
-        };
-      }),
-    });
-  });
+addon.param("type", function (req, res, next, val) {
+  if (MANIFEST.types.includes(val)) {
+    next();
+  } else {
+    next("Unsupported type " + val);
+  }
 });
 
-addon.get("/stream/tv/:id.json", (req, res) => {
+addon.get("/catalog/:type/:id.json", (req, res) => {
+  cache
+    .wrap("catalog", () => getMatches(), { ttl: 60 * 60 * 6 })
+    .then((games) => {
+      respond(res, {
+        metas: games.map((x) => {
+          return {
+            id: x.id,
+            type: req.params.type,
+            name: x.name,
+          };
+        }),
+      });
+    });
+});
+
+addon.get("/stream/:type/:id.json", (req, res) => {
   const id = req.params.id;
   const arr = id.split(":");
   const game = arr[1];
   const title = arr[2];
 
-  getStreams(game).then((streams) => {
-    respond(
-      res,
-      streams.map((x) => ({ name: "NBAstreams", title: title, url: x }))
-    );
-  });
+  cache
+    .wrap(game, () => getStreams(game), { ttl: 60 * 15 })
+    .then((streams) => {
+      respond(res, {
+        streams: streams.map((x) => ({
+          name: "NBAstreams",
+          title: title,
+          url: x,
+        })),
+      });
+    });
 });
 
 function respond(res, data) {

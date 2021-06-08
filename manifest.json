@@ -1,35 +1,20 @@
 {
-    "id": "NBAstreams",
-    "version": "1.0.0",
+    "id": "com.stremio.NBAstreams.addon",
+    "version": "2.0.0",
     "name": "NBAstreams",
     "description": "Watch live nba matches! Streams will show up when matches begin.",
     "types": [
         "tv"
     ],
     "resources": [
-        "stream",
         "catalog",
+        "stream",
         "meta"
     ],
     "catalogs": [
         {
-            "id": "NBA",
             "type": "tv",
-            "name": "NBA",
-            "extra": [
-                {
-                    "name": "search",
-                    "isRequired": false
-                },
-                {
-                    "name": "genre",
-                    "isRequired": false
-                },
-                {
-                    "name": "skip",
-                    "isRequired": false
-                }
-            ]
+            "id": "nba"
         }
     ],
     "idPrefixes": [
