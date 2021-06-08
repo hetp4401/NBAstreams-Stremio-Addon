@@ -6,12 +6,20 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hetp4401/NBAstreams-Stremio-Addon.git"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hetp4401/NBAstreams-Stremio-Addon/issues"
+  },
+  "homepage": "https://github.com/hetp4401/NBAstreams-Stremio-Addon#readme",
   "dependencies": {
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "node-cache": "^5.1.2",
-    "request": "^2.88.2"
+    "fast-html-parser": "^1.0.1",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   }
 }
