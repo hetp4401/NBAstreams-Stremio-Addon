@@ -2,6 +2,7 @@ const express = require("express");
 const addon = express();
 
 const { getMatches } = require("./matches");
+const { getStreams } = require("./streams");
 
 const MANIFEST = require("./manifest.json");
 const META = require("./meta.json");
@@ -10,37 +11,40 @@ addon.listen(process.env.PORT || 7000, () => {
   console.log("Add-on Repository URL: http://127.0.0.1:7000/manifest.json");
 });
 
-addon.get("/manifest.json", function (req, res) {
+addon.get("/manifest.json", (req, res) => {
   respond(res, MANIFEST);
 });
 
-addon.get("/meta/tv/:id.json", (req, res, next) => {
+addon.get("/meta/tv/:id.json", (req, res) => {
   respond(res, META);
 });
 
-addon.get("/catalog/:type/:NBA.json", async function (req, res, next) {
-  const games = await getMatches();
-
-  const metas = games.map((x) => {
-    return {
-      id: x.id,
-      type: req.params.type,
-      name: x.name,
-    };
+addon.get("/catalog/tv/:id.json", (req, res) => {
+  getMatches().then((games) => {
+    respond(res, {
+      metas: games.map((x) => {
+        return {
+          id: x.id,
+          type: req.params.type,
+          name: x.name,
+        };
+      }),
+    });
   });
-
-  respond(res, { metas: metas });
 });
 
-addon.get("/stream/tv/:id.json", async (req, res, next) => {
-  console.log(req.params.id);
-
+addon.get("/stream/tv/:id.json", (req, res) => {
   const id = req.params.id;
-  const arr = id.substring(3).split(":");
-  const game = arr[0];
-  const title = arr[1];
+  const arr = id.split(":");
+  const game = arr[1];
+  const title = arr[2];
 
-  respond(res, { metas: [] });
+  getStreams(game).then((streams) => {
+    respond(
+      res,
+      streams.map((x) => ({ name: "NBAstreams", title: title, url: x }))
+    );
+  });
 });
 
 function respond(res, data) {

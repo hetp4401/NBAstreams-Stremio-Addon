@@ -26,7 +26,7 @@ function getMatches() {
       events.forEach((x) => {
         live.push({
           name: `${x.name} @ ${get_time(x.startTimestamp)}PM EST`,
-          id: `nba${x.id}:${x.name}`,
+          id: `nba:${x.id}:${x.name}`,
         });
       });
       return live;
