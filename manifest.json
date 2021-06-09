@@ -8,8 +8,7 @@
     ],
     "resources": [
         "catalog",
-        "stream",
-        "meta"
+        "stream"
     ],
     "catalogs": [
         {
