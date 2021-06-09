@@ -16,6 +16,10 @@ addon.listen(process.env.PORT || 7000, () => {
   console.log("Add-on Repository URL: http://127.0.0.1:7000/manifest.json");
 });
 
+addon.get("/", (req, res) => {
+  res.send("Stremio NBAstreams Add-on API");
+});
+
 addon.get("/manifest.json", (req, res) => {
   respond(res, MANIFEST);
 });
