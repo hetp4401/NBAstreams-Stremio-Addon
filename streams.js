@@ -38,8 +38,7 @@ function getStreams(id) {
       const filtered = sources.filter((x) => x.name in sourceFuncs);
       const streams = Promise.all(filtered.map((x) => getSource(x)));
 
-      console.log(streams);
-      console.log();
+      console.log(id + " - " + filtered.length);
 
       return streams;
     })
