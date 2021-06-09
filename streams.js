@@ -5,6 +5,7 @@ const sourceFuncs = {
   topstreamer: require("./sources/topstreamer").getStream,
   givemeredditstream: require("./sources/givemeredditstream").getStream,
   BongStreams: require("./sources/bongstreams").getStream,
+  papahdlive: require("./sources/papahdlive").getStream,
 };
 
 function getSource(source) {
@@ -34,6 +35,8 @@ function getStreams(id) {
         const name = x.querySelector(".first").rawText.trim();
         return { tunnel: tunnel, name: name };
       });
+
+      console.log(sources);
 
       const filtered = sources.filter((x) => x.name in sourceFuncs);
       const streams = Promise.all(filtered.map((x) => getSource(x)));

@@ -1,14 +1,14 @@
 const rp = require("request-promise");
 
-function get_date() {
+function getDate() {
   const d = new Date();
   d.setHours(d.getHours() - 7);
   const date = d.toISOString().split("T")[0];
   return date;
 }
 
-function get_time(startTimestamp) {
-  const d = new Date((parseInt(startTimestamp) - 18000) * 1000);
+function getTime(startTimestamp) {
+  const d = new Date((parseInt(startTimestamp) - 14400) * 1000);
   const time = `${d.getUTCHours() % 12}:${
     d.getUTCMinutes() == 0 ? "00" : d.getUTCMinutes()
   }`;
@@ -16,16 +16,17 @@ function get_time(startTimestamp) {
 }
 
 function getMatches() {
-  return rp(`https://sportscentral.io/api/nba-tournaments?date=${get_date()}`)
+  return rp(`https://sportscentral.io/api/nba-tournaments?date=${getDate()}`)
     .then((body) => {
       const json = JSON.parse(body);
       const nba = json[0];
       const events = nba.events;
+      const filtered = events.filter((x) => x.status.type != "finished");
 
       const live = [];
-      events.forEach((x) => {
+      filtered.forEach((x) => {
         live.push({
-          name: `${x.name} @ ${get_time(x.startTimestamp)}PM EST`,
+          name: `${x.name} @ ${getTime(x.startTimestamp)}PM EST`,
           id: `nba:${x.id}:${x.name}`,
         });
       });
@@ -33,5 +34,9 @@ function getMatches() {
     })
     .catch((err) => []);
 }
+
+getMatches().then((matches) => {
+  console.log(matches);
+});
 
 module.exports = { getMatches };
