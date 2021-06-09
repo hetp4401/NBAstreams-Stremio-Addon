@@ -61,7 +61,6 @@ addon.get("/stream/:type/:id.json", (req, res) => {
   cache
     .wrap(game, () => getStreams(game), { ttl: 60 * 15 })
     .then((streams) => {
-      console.log(streams);
       respond(res, {
         streams: streams.map((x) => ({
           name: "NBAstreams",

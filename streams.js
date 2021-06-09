@@ -28,6 +28,7 @@ function getStreams(id) {
       const html = parse(body);
       const tbody = html.querySelector("tbody");
       const tr = tbody.querySelectorAll("tr").slice(1);
+
       const sources = tr.map((x) => {
         const tunnel = x.rawAttributes["data-stream-link"];
         const name = x.querySelector(".first").rawText.trim();
@@ -35,8 +36,10 @@ function getStreams(id) {
       });
 
       const filtered = sources.filter((x) => x.name in sourceFuncs);
-
       const streams = Promise.all(filtered.map((x) => getSource(x)));
+
+      console.log(streams);
+      console.log();
 
       return streams;
     })
