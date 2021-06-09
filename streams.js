@@ -34,7 +34,6 @@ function getStreams(id) {
         return { tunnel: tunnel, name: name };
       });
 
-      console.log(sources);
       const filtered = sources.filter((x) => x.name in sourceFuncs);
 
       const streams = Promise.all(filtered.map((x) => getSource(x)));
