@@ -62,13 +62,11 @@ addon.get("/stream/:type/:id.json", (req, res) => {
     .wrap(game, () => getStreams(game), { ttl: 60 * 15 })
     .then((streams) => {
       respond(res, {
-        streams: [{ name: "hi", title: "erfer", url: "rgergergregeg" }],
-
-        // streams.map((x) => ({
-        //   name: "NBAstreams",
-        //   title: title,
-        //   url: x,
-        // })),
+        streams: streams.map((x) => ({
+          name: "NBAstreams",
+          title: title,
+          url: x,
+        })),
       });
     });
 });
@@ -77,6 +75,6 @@ function respond(res, data) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Content-Type", "application/json");
-  res.setHeader("Cache-Control", "public, max-age=3600");
+  res.setHeader("Cache-Control", "public, max-age=14400");
   res.send(data);
 }
