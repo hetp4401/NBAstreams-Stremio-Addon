@@ -72,6 +72,7 @@ addon.get("/stream/:type/:id.json", (req, res) => {
 });
 
 function respond(res, data) {
+  console.log("test");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Content-Type", "application/json");
